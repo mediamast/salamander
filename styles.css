@@ -6,8 +6,9 @@
     --color-charcoal: #35343F;
     --color-black: #26252D;
     --color-white: #FFFFFF;
-    --color-pink: #FFB3C8;
-    --color-periwinkle: #C4CCFF;
+    --color-pink: #ffaad6;
+    --color-periwinkle: #c6d3ff;
+    --color-yellow: #fcffaa;
 }
 
 html {
@@ -98,33 +99,35 @@ img {
 
 /* == Comparison Section == */
 .comparison-section {
-    background: #EAEAF7;
+    background: #e7edf0;
     padding: 6rem 2rem 0;
     overflow: hidden;
     text-align: center;
 }
 
 .comparison-heading {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.15;
+    font-size: 4.5rem;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
     color: var(--color-black);
-    max-width: 32rem;
+    max-width: 64rem;
     margin: 0 auto 2.5rem;
 }
 
 .comparison-toggle-wrap {
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
     margin-bottom: 3rem;
 }
 
 .comparison-toggle-label {
-    font-size: 1rem;
+    font-size: 2rem;
     font-weight: 500;
+    letter-spacing: -0.03em;
     color: var(--color-black);
-    opacity: 0.35;
+    opacity: 0.5;
     transition: opacity 0.4s;
 }
 
@@ -134,8 +137,8 @@ img {
 
 .comparison-toggle-btn {
     position: relative;
-    width: 3.25rem;
-    height: 1.875rem;
+    width: 5.5rem;
+    height: 3rem;
     background: var(--color-charcoal);
     border-radius: 999px;
     cursor: pointer;
@@ -149,32 +152,33 @@ img {
 
 .comparison-toggle-knob {
     position: absolute;
-    width: 1.375rem;
-    height: 1.375rem;
+    width: 2.25rem;
+    height: 2.25rem;
     background: white;
     border-radius: 50%;
     top: 50%;
-    left: 0.25rem;
+    left: 0.375rem;
     transform: translateY(-50%);
     transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .comparison-toggle-btn[aria-checked="true"] .comparison-toggle-knob {
-    left: calc(100% - 1.625rem);
+    left: calc(100% - 2.625rem);
 }
 
 .pills-stage {
     position: relative;
     width: 100%;
-    height: 22rem;
+    height: 30rem;
 }
 
 .pill {
     position: absolute;
-    padding: 0.625rem 1.375rem;
-    border-radius: 999px;
-    font-size: 0.9375rem;
+    padding: 1.25rem;
+    border-radius: 1.5rem;
+    font-size: 2rem;
     font-weight: 500;
+    letter-spacing: -0.03em;
     color: var(--color-black);
     white-space: nowrap;
     will-change: transform, left, top;

@@ -41,7 +41,7 @@ gsap.timeline({
         { agency: 'Hoge opstartkosten',          salamander: 'Jij kiest wat je betaald',  bg: 'var(--color-orange)'     },
         { agency: 'Eigen beheer is moeilijk',    salamander: 'Eenvoudig te beheren',      bg: 'var(--color-pink)'       },
         { agency: 'Verouderd en traag',          salamander: 'In jouw branding saus',     bg: 'var(--color-periwinkle)' },
-        { agency: 'Ontwikkeling duurt lang',     salamander: 'Korte doorlooptijden',      bg: 'var(--color-lime)'       },
+        { agency: 'Ontwikkeling duurt lang',     salamander: 'Korte doorlooptijden',      bg: 'var(--color-yellow)'     },
         { agency: 'CRM en website praten niet',  salamander: 'Naadloze integraties',      bg: 'var(--color-purple)'     },
     ];
 
