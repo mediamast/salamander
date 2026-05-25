@@ -113,8 +113,8 @@ gsap.timeline({
                 y      = -h - i * (h + 30);
                 vx     = (Math.random() - 0.5) * 2;
                 vy     = 0;
-                angle  = (Math.random() - 0.5) * 0.5;
-                angVel = 0;
+                angle  = Math.random() * Math.PI * 2;
+                angVel = (Math.random() - 0.5) * 0.4;
             }
 
             const body = Bodies.rectangle(x, y, w, h, {
@@ -165,7 +165,7 @@ gsap.timeline({
             pillEls.forEach((el, i) => {
                 gsap.to(el, {
                     left: targets[i].x, top: targets[i].y, rotation: 0,
-                    duration: 0.85, delay: i * 0.07, ease: 'silky',
+                    duration: 0.85, delay: i * 0.07, ease: 'back.out(1.6)',
                 });
             });
         });
@@ -189,8 +189,8 @@ gsap.timeline({
     // Trigger physics when section scrolls into view
     new IntersectionObserver((entries, obs) => {
         if (entries[0].isIntersecting) {
-            startPhysics(false);
             obs.disconnect();
+            setTimeout(() => startPhysics(false), 800);
         }
     }, { threshold: 0.15 }).observe(document.getElementById('comparison'));
 })();

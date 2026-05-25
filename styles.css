@@ -9,6 +9,10 @@
     --color-pink: #ffaad6;
     --color-periwinkle: #c6d3ff;
     --color-yellow: #fcffaa;
+    --color-ice: #EAEEFF;
+    --color-ice-plus: #E1E4F5;
+    --color-cloud: #F7FCFF;
+    --color-cloud-plus: #EFF4F7;
 }
 
 html {
@@ -99,7 +103,7 @@ img {
 
 /* == Comparison Section == */
 .comparison-section {
-    background: #e7edf0;
+    background: var(--color-ice);
     padding: 6rem 2rem 0;
     overflow: hidden;
     text-align: center;
