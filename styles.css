@@ -1,3 +1,13 @@
+:root {
+    --color-lime: #D7FF7B;
+    --color-blue: #4D61F4;
+    --color-purple: #C5B1FF;
+    --color-orange: #FFD782;
+    --color-charcoal: #35343F;
+    --color-black: #26252D;
+    --color-white: #FFFFFF;
+}
+
 html {
   /* Proportional scale: 16px at 1440px → 22px at 2256px, locked outside that range */
   font-size: clamp(1em, 0.34em + 0.735vw, 1.375em);
@@ -17,7 +27,7 @@ img {
 .salamander-btn {
   position: relative;
   padding: 1.125rem;
-  background-color: #C5B1FF;
+  background-color: var(--color-purple);
   font-size: 1.125rem;
   text-transform: uppercase;
   font-weight: 500;
@@ -38,7 +48,7 @@ img {
   position: absolute;
   width: 1rem;
   height: 50%;
-  background-color: #C5B1FF;
+  background-color: var(--color-purple);
   transition: transform 0.3s ease;
 }
 
