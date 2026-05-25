@@ -6,6 +6,8 @@
     --color-charcoal: #35343F;
     --color-black: #26252D;
     --color-white: #FFFFFF;
+    --color-pink: #FFB3C8;
+    --color-periwinkle: #C4CCFF;
 }
 
 html {
@@ -92,4 +94,89 @@ img {
 
 .salamander-btn:hover .salamander-btn-corners::after {
   transform: translateX(0);
+}
+
+/* == Comparison Section == */
+.comparison-section {
+    background: #EAEAF7;
+    padding: 6rem 2rem 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.comparison-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-black);
+    max-width: 32rem;
+    margin: 0 auto 2.5rem;
+}
+
+.comparison-toggle-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.comparison-toggle-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-black);
+    opacity: 0.35;
+    transition: opacity 0.4s;
+}
+
+.comparison-toggle-label.is-active {
+    opacity: 1;
+}
+
+.comparison-toggle-btn {
+    position: relative;
+    width: 3.25rem;
+    height: 1.875rem;
+    background: var(--color-charcoal);
+    border-radius: 999px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.comparison-toggle-btn[aria-checked="true"] {
+    background: var(--color-blue);
+}
+
+.comparison-toggle-knob {
+    position: absolute;
+    width: 1.375rem;
+    height: 1.375rem;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 0.25rem;
+    transform: translateY(-50%);
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.comparison-toggle-btn[aria-checked="true"] .comparison-toggle-knob {
+    left: calc(100% - 1.625rem);
+}
+
+.pills-stage {
+    position: relative;
+    width: 100%;
+    height: 22rem;
+}
+
+.pill {
+    position: absolute;
+    padding: 0.625rem 1.375rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-black);
+    white-space: nowrap;
+    will-change: transform, left, top;
+    user-select: none;
 }
