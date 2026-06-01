@@ -4,30 +4,120 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 // Fast start, very long smooth deceleration — feels premium and physical
 CustomEase.create("silky", "M0,0 C0.16,1 0.3,1 1,1");
 
-const heroSection = document.querySelector("main > section:first-child");
-const heading = heroSection.querySelector("h1");
-const buttons = heroSection.querySelectorAll("a[href]");
+// == Scroll-in Animations ==
+// Add data-animate to any element to trigger a fade-up on scroll.
+// Optional parameters (all via data attributes):
+//   data-animate-y="48"          custom y offset (default: 40)
+//   data-animate-duration="1.1"  duration in seconds (default: 1.0)
+//   data-animate-delay="0.3"     delay in seconds (default: 0)
+//   data-animate-stagger="0.13"  when set on a parent, staggers its children
+(function initScrollAnimations() {
+    document.querySelectorAll('[data-animate]').forEach(el => {
+        const y        = parseFloat(el.dataset.animateY        ?? 40);
+        const duration = parseFloat(el.dataset.animateDuration ?? 1.0);
+        const delay    = parseFloat(el.dataset.animateDelay    ?? 0);
+        const stagger  = el.dataset.animateStagger;
+        const targets  = stagger !== undefined ? el.children : el;
 
-gsap.timeline({
-    scrollTrigger: {
-        trigger: heroSection,
-        start: "top 85%",
+        gsap.from(targets, {
+            scrollTrigger: {
+                trigger: el,
+                start: 'top 75%',
+                once: true,
+            },
+            opacity: 0,
+            y,
+            duration,
+            delay,
+            ease: 'silky',
+            ...(stagger !== undefined && { stagger: parseFloat(stagger || 0.13) }),
+        });
+    });
+})();
+
+// == Logo Switcher ==
+(function initLogos() {
+    const LOGOS = [
+        'images/references/logo_century21.svg',
+        'images/references/logo_livingstone.svg',
+        'images/references/logoipsum-211.svg',
+        'images/references/logoipsum-212.svg',
+        'images/references/logoipsum-213.svg',
+        'images/references/logoipsum-214.svg',
+        'images/references/logoipsum-215.svg',
+        'images/references/logoipsum-216.svg',
+        'images/references/logoipsum-217.svg',
+        'images/references/logoipsum-218.svg',
+        'images/references/logoipsum-219.svg',
+        'images/references/logoipsum-220.svg',
+    ];
+
+    const row = document.getElementById('logos-row');
+    if (!row) return;
+
+    const slots = Array.from(row.querySelectorAll('.logo-slot'));
+    const slotCurrent = []; // houdt bij welk logo-index per slot actief is
+    let animating = false;
+
+    // Initieel: verdeel logo's over de slots
+    slots.forEach((slot, i) => {
+        const idx = i % LOGOS.length;
+        slotCurrent.push(idx);
+        slot.appendChild(makeWrap(LOGOS[idx]));
+    });
+
+    function makeWrap(src) {
+        const wrap = document.createElement('div');
+        wrap.className = 'logo-item-wrap';
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        wrap.appendChild(img);
+        return wrap;
+    }
+
+    function switchLogo() {
+        if (animating) return;
+        animating = true;
+
+        // Kies willekeurig slot
+        const slotIdx = Math.floor(Math.random() * slots.length);
+        const slot = slots[slotIdx];
+
+        // Kies een ander logo dan het huidige
+        let newIdx;
+        do {
+            newIdx = Math.floor(Math.random() * LOGOS.length);
+        } while (newIdx === slotCurrent[slotIdx] && LOGOS.length > 1);
+
+        const outWrap = slot.querySelector('.logo-item-wrap');
+        const inWrap  = makeWrap(LOGOS[newIdx]);
+        slot.appendChild(inWrap);
+        gsap.set(inWrap, { y: '100%' });
+
+        gsap.timeline({
+            onComplete: () => {
+                outWrap.remove();
+                slotCurrent[slotIdx] = newIdx;
+                animating = false;
+                scheduleNext();
+            }
+        })
+        .to(outWrap, { y: '-100%', duration: 0.6, ease: 'power2.inOut' }, 0)
+        .to(inWrap,  { y: '0%',    duration: 0.6, ease: 'power2.inOut' }, 0);
+    }
+
+    function scheduleNext() {
+        gsap.delayedCall(0.5 + Math.random() * 0.5, switchLogo);
+    }
+
+    ScrollTrigger.create({
+        trigger: '#logos-section',
+        start: 'top bottom',
         once: true,
-    },
-})
-.from(heading, {
-    opacity: 0,
-    y: 48,
-    duration: 1.1,
-    ease: "silky",
-})
-.from(buttons, {
-    opacity: 0,
-    y: 28,
-    duration: 0.9,
-    stagger: 0.13,
-    ease: "silky",
-}, "<0.25");
+        onEnter: () => switchLogo(),
+    });
+})();
 
 // == Comparison Toggle ==
 (function initComparison() {
@@ -84,7 +174,11 @@ gsap.timeline({
         stopPhysics();
         const W = stage.offsetWidth, H = stage.offsetHeight;
 
-        matterEngine = Engine.create({ gravity: { y: 2 }, enableSleeping: true });
+        // Scale gravity and velocities to stage height so fall speed feels
+        // identical regardless of viewport size (30rem × 16px base = 480px ref).
+        const scale = H / 480;
+
+        matterEngine = Engine.create({ gravity: { y: 2 * scale }, enableSleeping: true });
         matterRunner = Runner.create();
 
         // Invisible walls + floor
@@ -103,15 +197,18 @@ gsap.timeline({
                 // Launch from current ordered positions
                 x      = parseFloat(el.style.left || 0) + w / 2;
                 y      = parseFloat(el.style.top  || 0) + h / 2;
-                vx     = (Math.random() - 0.5) * 16;
-                vy     = -(Math.random() * 7 + 3);
+                vx     = (Math.random() - 0.5) * 16 * scale;
+                vy     = -(Math.random() * 7 + 3) * scale;
                 angle  = 0;
                 angVel = (Math.random() - 0.5) * 0.3;
             } else {
-                // Drop from above, staggered
+                // Drop from above the section (not just above the stage)
+                const sectionRect = document.getElementById('comparison').getBoundingClientRect();
+                const stageRect   = stage.getBoundingClientRect();
+                const aboveStage  = stageRect.top - sectionRect.top + h + i * (h + 30);
                 x      = 80 + Math.random() * (W - 160);
-                y      = -h - i * (h + 30);
-                vx     = (Math.random() - 0.5) * 2;
+                y      = -aboveStage;
+                vx     = (Math.random() - 0.5) * 2 * scale;
                 vy     = 0;
                 angle  = Math.random() * Math.PI * 2;
                 angVel = (Math.random() - 0.5) * 0.4;
@@ -141,18 +238,32 @@ gsap.timeline({
     function getOrderedPositions() {
         const W = stage.offsetWidth, H = stage.offsetHeight;
         const gap = 12, rowGap = 12;
-        // Row 1: pills 0 + 1  |  Row 2: pills 2 + 3 + 4
+
         const r1w = pillEls[0].offsetWidth + gap + pillEls[1].offsetWidth;
         const r2w = pillEls[2].offsetWidth + gap + pillEls[3].offsetWidth + gap + pillEls[4].offsetWidth;
-        const ph  = pillEls[0].offsetHeight;
-        const y0  = (H - (ph * 2 + rowGap)) / 2;
-        const y1  = y0 + ph + rowGap;
+
+        // Fall back to single column if the widest row doesn't fit
+        if (Math.max(r1w, r2w) > W) {
+            const colGap = 10;
+            const totalH = pillEls.reduce((sum, el) => sum + el.offsetHeight, 0) + colGap * (pillEls.length - 1);
+            let y = Math.max(0, (H - totalH) / 2);
+            return pillEls.map(el => {
+                const pos = { x: Math.max(0, (W - el.offsetWidth) / 2), y };
+                y += el.offsetHeight + colGap;
+                return pos;
+            });
+        }
+
+        // Two-row layout: row 1 = pills 0+1, row 2 = pills 2+3+4
+        const ph = pillEls[0].offsetHeight;
+        const y0 = (H - (ph * 2 + rowGap)) / 2;
+        const y1 = y0 + ph + rowGap;
         return [
-            { x: (W - r1w) / 2,                                                                      y: y0 },
-            { x: (W - r1w) / 2 + pillEls[0].offsetWidth + gap,                                       y: y0 },
-            { x: (W - r2w) / 2,                                                                       y: y1 },
-            { x: (W - r2w) / 2 + pillEls[2].offsetWidth + gap,                                       y: y1 },
-            { x: (W - r2w) / 2 + pillEls[2].offsetWidth + gap + pillEls[3].offsetWidth + gap,        y: y1 },
+            { x: (W - r1w) / 2,                                                                 y: y0 },
+            { x: (W - r1w) / 2 + pillEls[0].offsetWidth + gap,                                  y: y0 },
+            { x: (W - r2w) / 2,                                                                  y: y1 },
+            { x: (W - r2w) / 2 + pillEls[2].offsetWidth + gap,                                  y: y1 },
+            { x: (W - r2w) / 2 + pillEls[2].offsetWidth + gap + pillEls[3].offsetWidth + gap,   y: y1 },
         ];
     }
 
@@ -172,6 +283,7 @@ gsap.timeline({
     }
 
     function toAgency() {
+        stopPhysics();
         pillEls.forEach(el => gsap.killTweensOf(el));
         pillEls.forEach((el, i) => { el.textContent = PILLS[i].agency; });
         gsap.delayedCall(0.05, () => startPhysics(true));
@@ -186,11 +298,10 @@ gsap.timeline({
         isSalamander ? toSalamander() : toAgency();
     });
 
-    // Trigger physics when section scrolls into view
-    new IntersectionObserver((entries, obs) => {
-        if (entries[0].isIntersecting) {
-            obs.disconnect();
-            setTimeout(() => startPhysics(false), 800);
-        }
-    }, { threshold: 0.15 }).observe(document.getElementById('comparison'));
+    ScrollTrigger.create({
+        trigger: document.getElementById('comparison-toggle'),
+        start: 'top bottom',
+        once: true,
+        onEnter: () => startPhysics(false),
+    });
 })();

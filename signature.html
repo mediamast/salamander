@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Signature – Dries Janssen</title>
+</head>
+<body style="margin:0; padding:0; font-family:Arial,sans-serif;">
+
+  <!--
+    Card: auto-width (grows with content), 148px tall, 24px radius, #eff4f7 background
+    All text is white-space:nowrap so the card always stays on one line
+    Inner layout: photo | 16px | name+title | 16px + divider + 16px | email+phone
+    Bottom: salamander logo (justify-between via fixed spacer)
+  -->
+  <table cellpadding="0" cellspacing="0" border="0"
+         style="background-color:#D7FF7B; border-radius:24px;">
+    <tr>
+      <td style="padding:20px;">
+
+        <table cellpadding="0" cellspacing="0" border="0">
+
+          <!-- ── Top row ── -->
+          <tr valign="middle">
+
+            <!-- Profile photo: 72×72px, border-radius 10.8px -->
+            <td valign="middle" style="padding-right:16px;">
+              <img src="https://assets.mediamast.be/signatures/salamander/salamander_mail_dries.png"
+                   alt="Dries Janssen" width="72" height="72"
+                   style="display:block; width:72px; height:72px; border-radius:10.8px;" />
+            </td>
+
+            <!-- Name + Title: Arial Regular 14px, 4px gap -->
+            <td valign="middle">
+              <p style="margin:0 0 4px 0; font-family:Arial,sans-serif; font-size:14px; line-height:normal; font-weight:normal; color:#26252d; white-space:nowrap;">Dries Janssen</p>
+              <p style="margin:0; font-family:Arial,sans-serif; font-size:14px; line-height:normal; font-weight:normal; color:rgba(38,37,45,0.5); white-space:nowrap;">Chief of Quality</p>
+            </td>
+
+            <!-- Divider: 1px line, black 25% opacity, 16px breathing room each side -->
+            <td valign="middle" style="padding:0 12px;">
+              <div style="width:1px; height:33px; background-color:rgba(0,0,0,0.25);"></div>
+            </td>
+
+            <!-- Email + Phone: Arial Regular 14px, 50% opacity -->
+            <td valign="middle">
+              <p style="margin:0 0 4px 0; font-family:Arial,sans-serif; font-size:14px; line-height:normal; font-weight:normal; color:rgba(38,37,45,0.5); white-space:nowrap;">dries@salamander.be</p>
+              <p style="margin:0; font-family:Arial,sans-serif; font-size:14px; line-height:normal; font-weight:normal; color:rgba(38,37,45,0.5); white-space:nowrap;">+32 474 13 53 06</p>
+            </td>
+
+          </tr>
+
+          <!-- Spacer: 148px card − 40px padding − 72px photo − 17px logo = 19px -->
+          <tr>
+            <td colspan="4" height="19" style="font-size:0; line-height:0;">&nbsp;</td>
+          </tr>
+
+          <!-- ── Salamander logo ── -->
+          <tr>
+            <td colspan="4">
+              <img src="https://assets.mediamast.be/signatures/salamander/salamander_mail_logo.png"
+                   alt="salamander" height="17"
+                   style="display:block; height:17px; width:auto; border:0;" />
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
